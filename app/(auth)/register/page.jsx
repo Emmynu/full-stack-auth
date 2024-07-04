@@ -7,65 +7,88 @@ import Cookies from "js-cookie"
 import { auth } from "@/libs/firebase-config"
 import { deleteUser } from "firebase/auth"
 import { Button } from "@/libs/button"
- 
+import Image from "next/image"
+import image from "@/public/test.jpg"
+import Link from "next/link"
+
 const userInputSchema= z.object({
     id: z.number().optional(),
-    name: z.string().min(1,{message:"Cannot be less than 1"}).max(10,{message: "Name is too Long"}).trim(),
+    name: z.string().min(1,{message:"Name cannot be empty"}).max(10,{message: "Name is too Long"}).trim(),
     email: z.string().email().trim(),
     password: z.string().min(1,{message: "Password is too short"}).max(8,{message: "Password is too long"}).trim()
 }) // zod schema
 
 const Register = () => {
-  return (
-    <main className="ml-5">
-       <h3 className="text-2xl font-bold my-3 cursor-pointer">Create account</h3>
-       <form action={async(formData)=>{
-        const data = Object.fromEntries(formData) // getting user input through formData
-        const validateUserInput = userInputSchema.safeParse(data) // validate data with zod
-        
-        if(validateUserInput?.success){
-          const { name,email,password } = validateUserInput?.data
-          const authResult =  await authenticateUser(name, email, password) // authenticate the user using firebase auth
-          
-         if(authResult?.error){
-          toast.error(authResult?.error) // display if theres an error
-         }
-         else{
-          const result = await registerAuth(validateUserInput?.data,auth?.currentUser?.uid,auth?.currentUser?.refreshToken) // send the data to the server for processing
-          if(result?.err){
-            deleteUser(auth?.currentUser)
-            toast.error(result?.err)
-          }else{
-            await sendEmailVerficationLink()
-            // create a cookie
-            Cookies.set("token", auth?.currentUser?.refreshToken) 
-            setTimeout(() => {
-              window.location = "/"
-            }, 3000)
-            toast.success("Saved to Db")
+  
+  async function registerAction(formData) {
+    const data = Object.fromEntries(formData) // getting user input through formData
+          const validateUserInput = userInputSchema.safeParse(data) // validate data with zod
+          if(validateUserInput?.success){
+            const { name,email,password } = validateUserInput?.data
+            const authResult =  await authenticateUser(name, email, password) // authenticate the user using firebase auth
+            
+          if(authResult?.error){
+            toast.error(authResult?.error) // display if theres an error
           }
-         }
-          
-          
-        }else if(validateUserInput?.error){
-          console.log(validateUserInput?.error?.flatten()?.fieldErrors);
-        }
-        
-       }} method="post">
-          <section className="my-1.5">
-            <input className="border  border-gray-700 outline-none px-2 py-1 text-sm text-semibold " type="text" name="name" id="name" />
-          </section>
-          <section className="my-1.5">
-            <input className="border  border-gray-700 outline-none px-2 py-1 text-sm text-semibold " type="email" name="email" id="email" />
-          </section>
-          <section className="my-1.5">
-           <input className="border  border-gray-700 outline-none px-2 py-1 text-sm text-semibold " type="password" name="password" id="" />
-          </section>
-          <Button />
-       </form>
+          else{
+            const result = await registerAuth(validateUserInput?.data,auth?.currentUser?.uid,auth?.currentUser?.refreshToken) // send the data to the server for processing
+            if(result?.err){
+              deleteUser(auth?.currentUser)
+              toast.error(result?.err)
+            }else{
+              await sendEmailVerficationLink()
+              // create a cookie
+              Cookies.set("token", auth?.currentUser?.refreshToken) 
+              setTimeout(() => {
+                window.location = "/"
+              }, 3000)
+              toast.success("Saved to Db")
+            }
+          }
+            
+          }else if(validateUserInput?.error){
+          validateUserInput?.error?.issues.map(issue=>{
+            toast.error(issue?.message)
+          })
+          }
+  }
+  return (
+    <main className="form-container">
+      <section className="lg:col-span-2">
+        <Image src={image} className="form-image" />
+      </section>
+      {/* helvetica */}
+      <section className="form-content-container">
+        <h3 className="form-title">Create an account</h3>
+        <p className="form-label">Already have a account? <span className="form-label-link"><Link href={"/login"}>Login</Link></span></p>
+        <form className="my-3 "
+        action={registerAction} method="post">
+            <section className="my-2">
+              <span className="form-input-label">Username:</span>
+              <input className="form-input"  type="text" name="name" id="name" />
+            </section>
+
+            <section className="my-2">
+            <span className="form-input-label">Email:</span><br/>
+              <input className="form-input"  type="email" name="email" id="email" />
+            </section>
+            
+            <section className="my-2">
+            <span className="form-input-label">Password:</span>
+            <input className="form-input"  type="password" name="password" id="" />
+            </section>
+            <div className="mt-5 hover:bg-green-700 hover:opacity-90 transition-[all-2s-all] w-[90%] bg-green-600 flex flex-col items-center">
+              <Button />
+            </div>
+        </form>
+        <footer> 
+          <h3 className="text-center text-sm  font-medium">By continuing, you agree to our <span className="text-green-600 font-bold underline"><Link href={""}>Privacy Policy & Terms and Condition</Link></span></h3>
+        </footer>
+      </section>
        <Toaster />
     </main>
   )
 }
 
 export default Register
+

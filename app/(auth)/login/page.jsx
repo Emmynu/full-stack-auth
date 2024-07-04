@@ -7,6 +7,9 @@ import Cookies from "js-cookie"
 import { auth } from "@/libs/firebase-config"
 import { Button } from "@/libs/button"
 import Link from "next/link"
+import Image from "next/image"
+import image from "@/public/test.jpg"
+
 
 const userInputeSchema = z.object({
   id: z.string().optional(),
@@ -38,24 +41,36 @@ const Login = () => {
         toast.error(res.err)
       }
      
-    }else{
-
+    }else if (userInput?.error){
+     userInput?.error?.issues.map(issue=>{
+      toast.error(issue?.message)
+      });
     }
   }
 
   return (
-    <main className="ml-5">
-       <h3 className="text-2xl font-bold my-3 cursor-pointer">Log in to account</h3>
-       <form  method="post" action={loginAction}>
-          <section className="my-1.5">
-            <input className="border  border-gray-700 outline-none px-2 py-1 text-sm text-semibold " type="email" name="email" id="email" />
+    <main className="form-container">
+      <section className="lg:col-span-2">
+        <Image src={image} className="form-image"/>
+      </section>
+      <section className="form-content-container">
+        <h3 className="form-title">Log in to account</h3>
+        <p className="form-label">Don't have an account? <span className="form-label-link"><Link href={"/register"}>Register</Link></span></p>
+        <form  method="post" action={loginAction} className="my-3">
+          <section className="my-2">
+            <span className="form-input-label">Email:</span><br/>
+            <input className="form-input " type="email" name="email" id="email" />
           </section>
-          <section className="my-1.5">
-           <input className="border  border-gray-700 outline-none px-2 py-1 text-sm text-semibold " type="password" name="password" id="" />
+          <section className="my-2">
+            <span className="form-input-label">Password:</span><br/>
+            <input className="form-input " type="password" name="password" id="" />
           </section>
-          <h2 className="text-sm tracking-wide hover:underline mb-1 "><Link href={"/reset-password"}>Forgot Password?</Link></h2>
-          <Button />
-       </form>
+          <h2 className="text-sm tracking-wide hover:underline mt-3 "><Link href={"/reset-password"}>Forgot Password?</Link></h2>
+          <div className="mt-4 w-[90%] bg-green-600 flex flex-col items-center hover:bg-green-700 hover:opacity-90 transition-[all-2s-all]">
+            <Button />
+          </div>
+        </form>
+      </section>
        
        <Toaster />
     </main>

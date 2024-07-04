@@ -75,3 +75,29 @@ export async function updateCookie(id,cookie) {
     }
   }
 }
+
+export async function findUser(email) {
+  try {
+    await connectDB()
+    const user = await User.find({ email }).sort()
+      return user
+  } catch (error) {
+    return {
+      err: error?.message
+    }
+  }
+}
+
+export async function updatePasswordInDB(email, password) {
+  try {
+    await connectDB()
+    const salt = await bcrypt.genSalt()
+   const hashedPassword = await bcrypt.hash(password, salt)
+    const user = await User.updateOne({ email }, { $set: { password:hashedPassword }})
+      return user
+  } catch (error) {
+    return {
+      err: error?.message
+    }
+  }
+}

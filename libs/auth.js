@@ -1,5 +1,5 @@
 "use client"
-import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth"
+import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, updateProfile,updatePassword, sendPasswordResetEmail } from "firebase/auth"
 import { auth } from "./firebase-config"
 import Cookies from "js-cookie"
 
@@ -38,13 +38,25 @@ export async function sendEmailVerficationLink() {
   }
 }
 
+export async function updateUserPassword(email) {
+  try {
+    await sendPasswordResetEmail(auth,email)
+  } catch (error) {
+    return {
+      err: error?.message
+    }
+  }
+}
+
 export async function logOutUser() {
   try {
     await signOut(auth)
     Cookies.remove("token")
     window.location = "/"
   } catch (error) {
-    
+    return {
+      err: error?.message
+    }
   }
 }
 

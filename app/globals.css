@@ -2,4 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base{
+  .form-container{
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
+  }
+  .form-image{
+    @apply h-auto md:h-[100vh] w-[100%] object-cover
+  }
+  .form-content-container{
+    @apply md:col-span-1 m-12
+  }
+  .form-title{
+    @apply text-[26px] font-bold mt-3 mb-1.5 cursor-pointer text-center font-[helvetica]
+  }
+  .form-label{
+    @apply text-center font-medium text-sm md:text-[15px] leading-snug tracking-wide
+  }
+  .form-label-link{
+    @apply text-green-600 font-bold underline
+  }
+  .form-input-label{
+    @apply text-left  text-sm font-medium tracking-wide mb-0.5
+  }
+  .form-input{
+    @apply border outline-none border-black py-1.5 text-sm font-medium tracking-wide  px-2 rounded-[4px] w-[90%]
+  }
+}
 
