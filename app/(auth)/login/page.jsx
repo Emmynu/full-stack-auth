@@ -55,7 +55,7 @@ const Login = () => {
       </section>
       <section className="form-content-container">
         <h3 className="form-title">Log in to account</h3>
-        <p className="form-label">Don't have an account? <span className="form-label-link"><Link href={"/register"}>Register</Link></span></p>
+        <p className="form-label">Don&#39;t have an account? <span className="form-label-link"><Link href={"/register"}>Register</Link></span></p>
         <form  method="post" action={loginAction} className="my-3">
           <section className="my-2">
             <span className="form-input-label">Email:</span><br/>
