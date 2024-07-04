@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server"
 import nodemailer from "nodemailer"
-import { connectDB } from "../../../libs/connect"
-import { User } from "../../../libs/schema"
 
-export const transporter = nodemailer.createTransport({
+
+ const transporter = nodemailer.createTransport({
   service:"Gmail",
   auth:{
     user: "loluwasimi54@gmail.com",

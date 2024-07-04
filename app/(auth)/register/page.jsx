@@ -55,7 +55,7 @@ const Register = () => {
   return (
     <main className="form-container">
       <section className="lg:col-span-2">
-        <Image src={image} className="form-image" />
+        <Image src={image} className="form-image" alt="img" />
       </section>
       {/* helvetica */}
       <section className="form-content-container">

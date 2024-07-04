@@ -51,7 +51,7 @@ const Login = () => {
   return (
     <main className="form-container">
       <section className="lg:col-span-2">
-        <Image src={image} className="form-image"/>
+        <Image src={image} className="form-image" alt="image"/>
       </section>
       <section className="form-content-container">
         <h3 className="form-title">Log in to account</h3>
