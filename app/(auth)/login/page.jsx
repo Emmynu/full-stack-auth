@@ -2,10 +2,10 @@
 import { findUserInDb, updateCookie } from "@/server-actions/auth/auth"
 import { z } from "zod"
 import { toast, Toaster } from "sonner"
-import {  loginUser } from "@/libs/auth"
+import {  loginUser, googleAction } from "@/libs/auth"
 import Cookies from "js-cookie"
 import { auth } from "@/libs/firebase-config"
-import { Button } from "@/libs/button"
+import { Button, GoogleButton } from "@/libs/button"
 import Link from "next/link"
 import Image from "next/image"
 import image from "@/public/test.jpg"
@@ -66,10 +66,15 @@ const Login = () => {
             <input className="form-input " type="password" name="password" id="" />
           </section>
           <h2 className="text-sm tracking-wide hover:underline mt-3 "><Link href={"/reset-password"}>Forgot Password?</Link></h2>
-          <div className="mt-4 w-[90%] bg-green-600 flex flex-col items-center hover:bg-green-700 hover:opacity-90 transition-[all-2s-all]">
-            <Button />
-          </div>
+            <div className="hover:bg-green-700 hover:opacity-90 transition-[all-2s-all] w-[90%] bg-green-600 flex flex-col items-center px-5 tracking-wide font-bold py-3 rounded-[4px] mt-5">
+              <Button />
+            </div>
         </form>
+        <h3 className="text-center mb-2 font-bold text-slate-600">OR</h3>
+       
+       <section className="flex items-center justify-center rounded-[4px] border py-1 border-slate-400 tracking-wide cursor-pointer" onClick={googleAction}>
+          <GoogleButton />
+       </section>
       </section>
        
        <Toaster />

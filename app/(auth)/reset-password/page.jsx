@@ -7,7 +7,6 @@ import { Toaster, toast } from 'sonner'
 import Image from "next/image"
 import Link from "next/link"
 import image from "@/public/test.jpg"
-
 import { z } from "zod"
 
 const userInputeSchema = z.object({
@@ -39,19 +38,7 @@ const ResetPassword = () => {
           if (result?.err) {
             toast.error(res?.err)
           }else{
-            const res = await fetch("/api/mail",{
-              method: "POST",
-              headers:{
-                ContentType: "application/json",
-              },
-              body: JSON.stringify({ email, user})      
-            })
-
-            if (res.ok) {
-              toast.success("Sent reset link and password to your mail")
-            } else {
-              toast.error("An error Occured")
-            }
+            
           }
         }
       } else {
@@ -78,9 +65,9 @@ const ResetPassword = () => {
             <span className="form-input-label">Enter your email:</span><br/>
               <input className="form-input " type="email" name="email" id="email" />
             </section>
-           <div className="mt-4 w-[90%] bg-green-600 flex flex-col items-center hover:bg-green-700 hover:opacity-90 transition-[all-2s-all]">
-            <Button />
-           </div>
+            <div className="hover:bg-green-700 hover:opacity-90 transition-[all-2s-all] w-[90%] bg-green-600 flex flex-col items-center px-5 tracking-wide font-bold py-3 rounded-[4px] mt-5">
+              <Button />
+            </div>
         </form>
       </section>
        
@@ -90,3 +77,6 @@ const ResetPassword = () => {
 }
 
 export default ResetPassword
+
+
+

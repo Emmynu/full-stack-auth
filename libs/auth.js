@@ -1,7 +1,9 @@
 "use client"
-import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, updateProfile,updatePassword, sendPasswordResetEmail } from "firebase/auth"
-import { auth } from "./firebase-config"
+import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail, signInWithPopup } from "firebase/auth"
+import { auth, provider } from "./firebase-config"
 import Cookies from "js-cookie"
+import { findUser, saveUserInDB,updateCookie } from "@/server-actions/auth/auth"
+import { toast } from "sonner"
 
 export async function authenticateUser(name, email,password){
   try {
@@ -48,6 +50,16 @@ export async function updateUserPassword(email) {
   }
 }
 
+export async function signInWithGmail() {
+  try {
+    await signInWithPopup(auth,provider)
+  } catch (error) {
+    return {
+      err: error?.message
+    }
+  }
+}
+
 export async function logOutUser() {
   try {
     await signOut(auth)
@@ -61,3 +73,44 @@ export async function logOutUser() {
 }
 
 
+export async function googleAction(){
+  const res = await signInWithGmail()
+  
+  if (res?.err) {
+    toast.error(res?.err)
+  } else {
+  
+   const user =  await findUser(auth?.currentUser?.email)
+   if (user?.err) {
+    toast.error(user?.err)
+   } else {
+    if (user.length > 0) {
+      await updateCookie(auth?.currentUser?.uid,auth?.currentUser?.refreshToken)
+      Cookies.set("token", auth?.currentUser?.refreshToken) 
+      setTimeout(() => {
+        window.location = "/"
+      }, 3000)
+      toast.success("Successfully logged in ")
+    } else {
+      const user = {
+        email:auth?.currentUser?.email,
+        name:auth?.currentUser?.displayName,
+        uid: auth?.currentUser?.uid,
+        token: auth?.currentUser?.refreshToken
+      }
+     const result =  await saveUserInDB(user)
+     if (result?.err) {
+      toast.error(result?.err)
+     } else {
+        await sendEmailVerficationLink()
+        // create a cookie
+        Cookies.set("token", auth?.currentUser?.refreshToken) 
+        setTimeout(() => {
+          window.location = "/"
+        }, 3000)
+        toast.success("Saved to Db")
+     }
+    }
+   }
+  }
+}

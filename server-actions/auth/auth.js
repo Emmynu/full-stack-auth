@@ -80,7 +80,7 @@ export async function findUser(email) {
   try {
     await connectDB()
     const user = await User.find({ email }).sort()
-      return user
+    return user
   } catch (error) {
     return {
       err: error?.message
@@ -95,6 +95,18 @@ export async function updatePasswordInDB(email, password) {
    const hashedPassword = await bcrypt.hash(password, salt)
     const user = await User.updateOne({ email }, { $set: { password:hashedPassword }})
       return user
+  } catch (error) {
+    return {
+      err: error?.message
+    }
+  }
+}
+
+export async function saveUserInDB(user) {
+  try {
+    const { name, email,uid, token } = user
+    await connectDB()
+    await User.create({name:name, email:email,  id:uid, token:token})
   } catch (error) {
     return {
       err: error?.message

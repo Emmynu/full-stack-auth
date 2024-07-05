@@ -1,15 +1,18 @@
 "use client"
-import { registerAuth } from "@/server-actions/auth/auth"
+import { registerAuth} from "@/server-actions/auth/auth"
 import { z } from "zod"
 import { toast, Toaster } from "sonner"
-import { authenticateUser, sendEmailVerficationLink } from "@/libs/auth"
+import { authenticateUser, sendEmailVerficationLink, googleAction } from "@/libs/auth"
 import Cookies from "js-cookie"
 import { auth } from "@/libs/firebase-config"
 import { deleteUser } from "firebase/auth"
-import { Button } from "@/libs/button"
+import { Button, GoogleButton } from "@/libs/button"
 import Image from "next/image"
 import image from "@/public/test.jpg"
 import Link from "next/link"
+
+
+
 
 const userInputSchema= z.object({
     id: z.number().optional(),
@@ -52,6 +55,9 @@ const Register = () => {
           })
           }
   }
+  
+ 
+
   return (
     <main className="form-container">
       <section className="lg:col-span-2">
@@ -73,15 +79,20 @@ const Register = () => {
               <input className="form-input"  type="email" name="email" id="email" />
             </section>
             
-            <section className="my-2">
+            <section className="my-2 ">
             <span className="form-input-label">Password:</span>
             <input className="form-input"  type="password" name="password" id="" />
             </section>
-            <div className="mt-5 hover:bg-green-700 hover:opacity-90 transition-[all-2s-all] w-[90%] bg-green-600 flex flex-col items-center">
+            <div className="hover:bg-green-700 hover:opacity-90 transition-[all-2s-all] w-[90%] bg-green-600 flex flex-col items-center px-5 tracking-wide font-bold py-3 rounded-[4px] mt-5">
               <Button />
             </div>
         </form>
-        <footer> 
+        <h3 className="text-center mb-2 font-bold text-slate-600">OR</h3>
+       
+        <section className="flex items-center justify-center rounded-[4px] border py-1 border-slate-400 tracking-wide cursor-pointer" onClick={googleAction}>
+           <GoogleButton />
+        </section>
+        <footer className="mt-2"> 
           <h3 className="text-center text-sm  font-medium">By continuing, you agree to our <span className="text-green-600 font-bold underline"><Link href={""}>Privacy Policy & Terms and Condition</Link></span></h3>
         </footer>
       </section>
