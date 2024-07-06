@@ -1,5 +1,5 @@
 "use client"
-import { findUserInDb, updateCookie } from "@/server-actions/auth/auth"
+import { findUser, updateCookie } from "@/server-actions/auth/auth"
 import { z } from "zod"
 import { toast, Toaster } from "sonner"
 import {  loginUser, googleAction } from "@/libs/auth"
@@ -26,16 +26,20 @@ const Login = () => {
       const { email, password } = userInput?.data
       const res = await loginUser(email,password)
       if (!res?.err){
-        const result = await findUserInDb(password,email)
+        const result = await findUser(email)
         if(result?.err){
           toast.error(result?.err)
         }else{
-          await updateCookie(auth?.currentUser?.uid,auth?.currentUser?.refreshToken)
-          Cookies.set("token", auth?.currentUser?.refreshToken) 
-          setTimeout(() => {
-            window.location = "/"
-          }, 3000)
-          toast.success("Successfully logged in ")
+          if (result?.length > 0) {
+            await updateCookie(auth?.currentUser?.uid,auth?.currentUser?.refreshToken)
+            Cookies.set("token", auth?.currentUser?.refreshToken) 
+            setTimeout(() => {
+              window.location = "/"
+            }, 3000)
+            toast.success("Successfully logged in ")
+          } else {
+            toast.error("User Not Found!")
+          }
         }
       }else{
         toast.error(res.err)

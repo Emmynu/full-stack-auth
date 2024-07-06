@@ -2,7 +2,7 @@
 import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail, signInWithPopup } from "firebase/auth"
 import { auth, provider } from "./firebase-config"
 import Cookies from "js-cookie"
-import { findUser, saveUserInDB,updateCookie } from "@/server-actions/auth/auth"
+import { findUser, saveUserInDB, updateCookie } from "@/server-actions/auth/auth"
 import { toast } from "sonner"
 
 export async function authenticateUser(name, email,password){
@@ -95,10 +95,8 @@ export async function googleAction(){
       const user = {
         email:auth?.currentUser?.email,
         name:auth?.currentUser?.displayName,
-        uid: auth?.currentUser?.uid,
-        token: auth?.currentUser?.refreshToken
       }
-     const result =  await saveUserInDB(user)
+     const result =  await saveUserInDB(user, auth?.currentUser?.uid,auth?.currentUser?.refreshToken)
      if (result?.err) {
       toast.error(result?.err)
      } else {

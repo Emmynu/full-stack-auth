@@ -2,7 +2,7 @@
 
 import { updateUserPassword } from "@/libs/auth"
 import { Button } from "@/libs/button"
-import { findUser, updatePasswordInDB } from "@/server-actions/auth/auth"
+import { findUser } from "@/server-actions/auth/auth"
 import { Toaster, toast } from 'sonner'
 import Image from "next/image"
 import Link from "next/link"
@@ -21,29 +21,14 @@ const ResetPassword = () => {
     const userInput  = userInputeSchema.safeParse(data)
     if (userInput?.success) {
       const { email } = userInput?.data
-
-      //  steps
-      // 1. check if the user exists in the db
-      const user = await findUser(email)
-  
-      // 2 . send a reset link  if the user exists
-      if (user.length > 0) {
-        const res = await updateUserPassword(email)
-      // 3 . encrypt and update the password in the db
-        if (res?.err) {
-          toast.error(res?.err)
-        } else {    
-          const result = await updatePasswordInDB(email, user[0]?.id)
-      // 4.  send the reset password to the user's mail
-          if (result?.err) {
-            toast.error(res?.err)
-          }else{
-            
-          }
-        }
+      const user = await findUser()
+      if (user.length>0) {
+        await updateUserPassword(email)
+        toast.success("We sent a reset link to your mail!")
       } else {
-        toast.error("User not found")
+        toast.error("User not Found!")
       }
+      
     } else if (userInput?.error) {
       userInput?.error?.issues?.map(issue=>{
         toast.error(issue?.message)

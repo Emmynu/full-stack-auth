@@ -1,5 +1,5 @@
 "use client"
-import { registerAuth} from "@/server-actions/auth/auth"
+import { saveUserInDB } from "@/server-actions/auth/auth"
 import { z } from "zod"
 import { toast, Toaster } from "sonner"
 import { authenticateUser, sendEmailVerficationLink, googleAction } from "@/libs/auth"
@@ -34,7 +34,7 @@ const Register = () => {
             toast.error(authResult?.error) // display if theres an error
           }
           else{
-            const result = await registerAuth(validateUserInput?.data,auth?.currentUser?.uid,auth?.currentUser?.refreshToken) // send the data to the server for processing
+            const result = await saveUserInDB(validateUserInput?.data,auth?.currentUser?.uid,auth?.currentUser?.refreshToken) // send the data to the server for processing
             if(result?.err){
               deleteUser(auth?.currentUser)
               toast.error(result?.err)
@@ -89,7 +89,7 @@ const Register = () => {
         </form>
         <h3 className="text-center mb-2 font-bold text-slate-600">OR</h3>
        
-        <section className="flex items-center justify-center text-slate-700 rounded-[4px] border py-2.5 border-slate-400  cursor-pointer" onClick={googleAction}>
+        <section className="flex items-center justify-center text-slate-700 tracking-wide rounded-[4px] border py-2.5 border-slate-400  cursor-pointer" onClick={googleAction}>
            <GoogleButton />
         </section>
         <footer className="mt-2"> 

@@ -6,14 +6,14 @@ import bcrypt from "bcrypt"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-export async function registerAuth(data,id,token) {
+export async function saveUserInDB(data,id,token) {
  try {
-  const { name, email, password} = data
-  const salt = await bcrypt.genSalt()
-  const hashedPassword = await bcrypt.hash(password, salt)
+  const { name, email} = data
+  // const salt = await bcrypt.genSalt()
+  // const hashedPassword = await bcrypt.hash(password, salt)
   const uid = id.toString()
   await connectDB()
-  await User.create({name:name, email:email, password: hashedPassword, id:uid, token:token})
+  await User.create({name:name, email:email, id:uid, token:token})
  } catch (error) {
   return {
     err: error?.message
@@ -21,24 +21,12 @@ export async function registerAuth(data,id,token) {
  }
 }
 
-export async function findUserInDb(password,email) {
+
+export async function findUser(email) {
   try {
-    await connectDB() 
-    const data = await User.find({ email }).sort()
-    if(data){
-     const isValid =  await bcrypt.compare(password,data[0]?.password)
-     if(isValid){
-      return data
-     }else{
-      return {
-        err: "Incorrect Password"
-      }
-     }
-    }else{
-      return {
-        err: "User not found"
-      }
-    }
+    await connectDB()
+    const user = await User.find({ email }).sort()
+    return user
   } catch (error) {
     return {
       err: error?.message
@@ -76,40 +64,4 @@ export async function updateCookie(id,cookie) {
   }
 }
 
-export async function findUser(email) {
-  try {
-    await connectDB()
-    const user = await User.find({ email }).sort()
-    return user
-  } catch (error) {
-    return {
-      err: error?.message
-    }
-  }
-}
 
-export async function updatePasswordInDB(email, password) {
-  try {
-    await connectDB()
-    const salt = await bcrypt.genSalt()
-   const hashedPassword = await bcrypt.hash(password, salt)
-    const user = await User.updateOne({ email }, { $set: { password:hashedPassword }})
-      return user
-  } catch (error) {
-    return {
-      err: error?.message
-    }
-  }
-}
-
-export async function saveUserInDB(user) {
-  try {
-    const { name, email,uid, token } = user
-    await connectDB()
-    await User.create({name:name, email:email,  id:uid, token:token})
-  } catch (error) {
-    return {
-      err: error?.message
-    }
-  }
-}
