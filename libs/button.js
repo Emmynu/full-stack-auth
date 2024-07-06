@@ -13,6 +13,6 @@ export function GoogleButton() {
   const { pending } = formStatus()
   return <>
     {!pending ? <><div className=""><FcGoogle /></div>
-      <h2 className="text-slate-700 font-bold font-[helvetica] text-[15px] ml-2 py-2.5">Continue with Google</h2></>: <span className="loading loading-spinner loading-xs text-slate-700 "></span>}</>
+      <h2 className=" font-bold font-[helvetica] text-[14px] leading-snug ml-2">Continue with Google</h2></>: <span className="loading loading-spinner loading-xs  "></span>}</>
 }
 
