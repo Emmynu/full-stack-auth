@@ -21,7 +21,7 @@ const ResetPassword = () => {
     const userInput  = userInputeSchema.safeParse(data)
     if (userInput?.success) {
       const { email } = userInput?.data
-      const user = await findUser()
+      const user = await findUser(email)
       if (user.length>0) {
         await updateUserPassword(email)
         toast.success("We sent a reset link to your mail!")
