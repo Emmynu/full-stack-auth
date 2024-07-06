@@ -76,7 +76,7 @@ const Login = () => {
         </form>
         <h3 className="text-center mb-2 font-bold text-slate-600">OR</h3>
        
-       <section className="flex items-center justify-center rounded-[4px] text-slate-700 border py-2.5 ml-2 border-slate-400 tracking-wide cursor-pointer" onClick={googleAction}>
+       <section className="flex items-center  justify-center rounded-[4px] text-slate-700 border py-2.5 ml-2 border-slate-400 tracking-wide cursor-pointer" onClick={googleAction}>
           <GoogleButton />
        </section>
       </section>
