@@ -1,5 +1,6 @@
 "use client"
 import { saveUserInDB } from "@/server-actions/auth/auth"
+import { useState } from "react"
 import { z } from "zod"
 import { toast, Toaster } from "sonner"
 import { authenticateUser, sendEmailVerficationLink, googleAction } from "@/libs/auth"
@@ -10,7 +11,7 @@ import { Button, GoogleButton } from "@/libs/button"
 import Image from "next/image"
 import image from "@/public/test.jpg"
 import Link from "next/link"
-
+import { FaEye, FaEyeSlash } from "react-icons/fa"
 
 
 
@@ -22,6 +23,7 @@ const userInputSchema= z.object({
 }) // zod schema
 
 const Register = () => {
+  const [isOpen, setIsOpen] = useState(null)
   
   async function registerAction(formData) {
     const data = Object.fromEntries(formData) // getting user input through formData
@@ -81,9 +83,12 @@ const Register = () => {
             
             <section className="my-2 ">
             <span className="form-input-label">Password:</span>
-            <input className="form-input"  type="password" name="password" id="" />
+            <main className="form-input flex items-center justify-between">
+              <input className="w-full outline-none"  type={isOpen ? "text" : "password"} name="password" id="" />
+              <span className="cursor-pointer" onClick={()=>setIsOpen(!isOpen)}>{isOpen ? <FaEyeSlash/> :<FaEye />}</span>
+            </main>
             </section>
-            <div className="hover:bg-green-700 hover:opacity-90 transition-[all-2s-all] w-[90%] bg-green-600 flex flex-col items-center px-5 tracking-wide font-bold py-3 rounded-[4px] mt-5">
+            <div className="hover:bg-green-700 hover:opacity-90 transition-[all-2s-all] w-[90%] bg-green-600 flex flex-col items-center px-5 tracking-wide font-bold py-3 rounded-[4px] mt-5 text-white">
               <Button />
             </div>
         </form>

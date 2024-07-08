@@ -41,7 +41,11 @@ export async function currentUser(){
    const token =  cookie.get("token")
    const user = await User.find({ token:token?.value }).sort()
    if (user) {
-    return user
+    if (user.length > 0) {
+      return user
+    } else {
+      return []
+    }
    }else{
     redirect("/login")
    }

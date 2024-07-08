@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { auth } from "./firebase-config"
 import { onAuthStateChanged } from "firebase/auth"
 
+
 const VerifyEmail = () => {
   const [isEmailVerified, setIsEmailVerified] = useState(null)
 
@@ -21,3 +22,6 @@ const VerifyEmail = () => {
 }
 
 export default VerifyEmail
+
+
+  

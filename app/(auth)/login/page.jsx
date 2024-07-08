@@ -1,5 +1,6 @@
 "use client"
 import { findUser, updateCookie } from "@/server-actions/auth/auth"
+import { useState } from "react"
 import { z } from "zod"
 import { toast, Toaster } from "sonner"
 import {  loginUser, googleAction } from "@/libs/auth"
@@ -9,6 +10,7 @@ import { Button, GoogleButton } from "@/libs/button"
 import Link from "next/link"
 import Image from "next/image"
 import image from "@/public/test.jpg"
+import { FaEye, FaEyeSlash } from "react-icons/fa"
 
 
 const userInputeSchema = z.object({
@@ -18,6 +20,7 @@ const userInputeSchema = z.object({
 })
 
 const Login = () => {
+  const [isOpen, setIsOpen] = useState(null)
 
  async function loginAction(formData) {
     const data = Object.fromEntries(formData)
@@ -67,7 +70,10 @@ const Login = () => {
           </section>
           <section className="my-2">
             <span className="form-input-label">Password:</span><br/>
-            <input className="form-input " type="password" name="password" id="" />
+            <main className="form-input flex items-center justify-between">
+              <input className="w-full outline-none"  type={isOpen ? "text" : "password"} name="password" id="" />
+              <span className="cursor-pointer" onClick={()=>setIsOpen(!isOpen)}>{isOpen ? <FaEyeSlash/> :<FaEye />}</span>
+            </main>
           </section>
           <h2 className="text-sm tracking-wide hover:underline mt-3 "><Link href={"/reset-password"}>Forgot Password?</Link></h2>
             <div className="hover:bg-green-700 hover:opacity-90 transition-[all-2s-all] w-[90%] bg-green-600 flex flex-col items-center px-5 tracking-wide font-bold py-3 rounded-[4px] mt-5">
