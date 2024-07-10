@@ -17,10 +17,11 @@ import { FaEye, FaEyeSlash } from "react-icons/fa"
 
 const userInputSchema= z.object({
     id: z.number().optional(),
-    name: z.string().min(1,{message:"Name cannot be empty"}).max(10,{message: "Name is too Long"}).trim(),
+    name: z.string().min(1,{message:"Name cannot be empty"}).max(20,{message: "Name is too Long"}).trim(),
     email: z.string().email().trim(),
     password: z.string().min(1,{message: "Password is too short"}).max(8,{message: "Password is too long"}).trim()
 }) // zod schema
+
 
 const Register = () => {
   const [isOpen, setIsOpen] = useState(null)
@@ -32,23 +33,28 @@ const Register = () => {
             const { name,email,password } = validateUserInput?.data
             const authResult =  await authenticateUser(name, email, password) // authenticate the user using firebase auth
             
+            
+
           if(authResult?.error){
             toast.error(authResult?.error) // display if theres an error
           }
           else{
-            const result = await saveUserInDB(validateUserInput?.data,auth?.currentUser?.uid,auth?.currentUser?.refreshToken) // send the data to the server for processing
-            if(result?.err){
-              deleteUser(auth?.currentUser)
-              toast.error(result?.err)
-            }else{
-              await sendEmailVerficationLink()
-              // create a cookie
-              Cookies.set("token", auth?.currentUser?.refreshToken) 
-              setTimeout(() => {
-                window.location = "/"
-              }, 3000)
-              toast.success("Saved to Db")
-            }
+            setTimeout(() => {
+              const result =  saveUserInDB(validateUserInput?.data,auth?.currentUser?.uid,auth?.currentUser?.refreshToken,auth?.currentUser?.photoURL) // send the data to the server for processing
+              if(result?.err){
+                deleteUser(auth?.currentUser)
+                toast.error(result?.err)
+              }else{
+                 sendEmailVerficationLink()
+                // create a cookie
+                Cookies.set("token", auth?.currentUser?.refreshToken) 
+                setTimeout(() => {
+                  window.location = "/"
+                }, 3000)
+                toast.success("Saved to Db")
+              }
+            }, 3000);
+            
           }
             
           }else if(validateUserInput?.error){

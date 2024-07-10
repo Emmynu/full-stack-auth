@@ -8,11 +8,13 @@ import { toast } from "sonner"
 export async function authenticateUser(name, email,password){
   try {
     await createUserWithEmailAndPassword(auth,email,password).then(res=>{
-      updateProfile(auth?.currentUser,{
+       updateProfile(auth?.currentUser,{
         displayName:name,
-        photoURL: ""
+        photoURL:"https://images.pexels.com/photos/9551192/pexels-photo-9551192.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+        
       })
     })
+    
   } catch (err) {
     return {
       error: err?.message
@@ -112,3 +114,7 @@ export async function googleAction(){
    }
   }
 }
+
+
+
+  

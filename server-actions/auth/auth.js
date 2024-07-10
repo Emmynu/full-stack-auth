@@ -6,14 +6,14 @@ import bcrypt from "bcrypt"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-export async function saveUserInDB(data,id,token) {
+export async function saveUserInDB(data,id,token,url) {
  try {
   const { name, email} = data
   // const salt = await bcrypt.genSalt()
   // const hashedPassword = await bcrypt.hash(password, salt)
   const uid = id.toString()
   await connectDB()
-  await User.create({name:name, email:email, id:uid, token:token})
+  await User.create({name:name, email:email, id:uid, token:token,url:url})
  } catch (error) {
   return {
     err: error?.message

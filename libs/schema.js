@@ -1,24 +1,25 @@
-import mongoose, { Schema} from "mongoose";
+import mongoose, { Schema, mongo} from "mongoose";
 
 const userSchema = new Schema({
   id: String,
   email:String,
   name:String,
-  token:String
+  token:String,
+  url:String
 },
 {
   timestamps:true
 })
 
 
-// const todoSchema = new Schema({
-//   userId: String,
-//   todo: [{
-//     title: String
-//   }]
-// },{
-//   timestamps: true
-// })
-
+const friendsSchema = new Schema({
+  userId:String,
+  friends: [{
+    id: String,
+    email:String,
+    name:String,
+    url:String
+  }]
+})
 export const User = mongoose.models.User || mongoose.model("User", userSchema)
-// export const Todo = mongoose.models.Todo || mongoose.model( "Todo", todoSchema)
+export const Friends = mongoose.models.Friends || mongoose.model("Friends", friendsSchema)
