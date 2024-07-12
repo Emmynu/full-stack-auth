@@ -9,8 +9,8 @@ import { ActiveStatus, IsVerfied, SearchUserForm } from "@/libs/client"
 export default async function Page(){
   const user = await currentUser()
 
-
-  return <main className="bg-white shadow-md w-[95%] md:w-7/12 lg:w-[50%] m-[13%_auto_0] p-7 h-fit">
+  console.log(user)
+  return <main className="bg-white shadow-md w-[100%] md:w-7/12 lg:w-[50%] m-[13%_auto_0] p-5 md:p-7 h-fit">
     <section className="flex items-center md:items-start justify-between">
       <section className="flex items-center">
         <section >
@@ -21,12 +21,12 @@ export default async function Page(){
             <h3 className="font-bold tracking-wide text-base md:text-[17px] mr-1">{user[0]?.name || "User"}</h3>
             <IsVerfied />
           </div>
-          <ActiveStatus />
+          <div className="text-xs"> <ActiveStatus /></div>
         </section>
         </section>
       <section className="flex items-center text-white outline-none bg-green-600 px-4  py-1.5 rounded-[4px]" onClick={logOutUser}>
         <FiLogOut/>
-        <button className="ml-1 font-medium text-sm">Log Out</button>
+        <button className="ml-1 font-medium text-xs md:text-sm">Log Out</button>
       </section>
     </section>
 

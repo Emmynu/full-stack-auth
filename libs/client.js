@@ -12,7 +12,7 @@ import { findUser } from "@/server-actions/auth/auth"
 import  { addFriendsDB } from "@/server-actions/chat/friends"
 import { MdVerified } from "react-icons/md"
 import { HiUserAdd } from "react-icons/hi"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 import Moment from "react-moment"
 
 
@@ -35,7 +35,7 @@ export const IsVerfied = () => {
 // console.log(auth?.currentUser?.metadata?.lastSignInTime)
 
 export function ActiveStatus(){
-  return  <h5 className="text-xs  text-green-600 mt-0 font-medium tracking-wide">Active <Moment fromNow>{auth?.currentUser?.metadata?.lastSignInTime}</Moment></h5>
+  return  <h5 className="text-[10px] md:text-xs  text-green-600 mt-0 font-medium tracking-wide">Active <Moment fromNow>{auth?.currentUser?.metadata?.lastSignInTime}</Moment></h5>
 }
 
 
@@ -49,8 +49,9 @@ export const SearchUserForm = () => {
   const [users, setUsers] = useState([])
   const [IsError, setIsError] = useState(false)
   const formRef = useRef()
+  const router = useRouter()
 
-// console.log(auth?.currentUser?.metadata.lastSignInTime);
+
   async function searchUser(formData) {
     formRef?.current?.reset()
     setIsError("Loading")
@@ -64,14 +65,12 @@ export const SearchUserForm = () => {
     } else {
       const { query } = data
       const user = await findUser(query)
-      console.log(user);
       if (user?.length > 0 ) {
           if (user[0]?.id === auth?.currentUser?.uid) {
             setIsError("Cannot add self to friendList")
             setUsers([])
           } else {
-            setUsers(user)
-            console.log(user);
+            setUsers(user) 
             setIsError("")
           }
       } else {
@@ -89,10 +88,21 @@ export const SearchUserForm = () => {
     if(res?.error){
       toast.error(res?.error)
     }else{
-      toast.success(`${name} to FriendsList`)
+      toast.success(`${name} added to FriendsList`)
     }
   }
   
+
+  async function isUserAccountVerified() {
+    setTimeout(() => {
+      if (auth?.currentUser?.emailVerified) {
+        router.push("/chats")
+      } else {
+        toast.error("Verify your account")
+      }
+    }, 3000);
+  }
+
   return <main >
     <form method="POST" ref={formRef} action={searchUser} className="flex items-center justify-center w-[100%] rounded-[4px] border border-black py-1.5 mt-5 ">
       <input type="email" placeholder="Search users by email" name="query" className="outline-none w-[90%]  ml-2 text-sm font-medium tracking-wide "/>
@@ -118,7 +128,7 @@ export const SearchUserForm = () => {
         </main>
       })}
     </section>
-    <h4 className="text-center mt-5 sm:text-sm text-green-600 font-medium hover:underline transition-[all_1s_linear]"><Link href={"/chats"}>Go to chats</Link></h4>
+    <h4 className="text-center mt-5 sm:text-sm text-green-600 font-medium cursor-pointer hover:underline transition-[all_1s_linear]" onClick={isUserAccountVerified}>Go to chats</h4>
     <Toaster />
   </main>
 }

@@ -98,7 +98,7 @@ export async function googleAction(){
         email:auth?.currentUser?.email,
         name:auth?.currentUser?.displayName,
       }
-     const result =  await saveUserInDB(user, auth?.currentUser?.uid,auth?.currentUser?.refreshToken)
+     const result =  await saveUserInDB(user, auth?.currentUser?.uid,auth?.currentUser?.refreshToken,auth?.currentUser?.photoURL)
      if (result?.err) {
       toast.error(result?.err)
      } else {
@@ -114,6 +114,7 @@ export async function googleAction(){
    }
   }
 }
+
 
 
 
