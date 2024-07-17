@@ -19,7 +19,9 @@ const friendsSchema = new Schema({
     email:String,
     name:String,
     url:String
-  }]
+  }],
+  isArchived: Boolean,
+  isBlocked: Boolean,
 })
 export const User = mongoose.models.User || mongoose.model("User", userSchema)
 export const Friends = mongoose.models.Friends || mongoose.model("Friends", friendsSchema)

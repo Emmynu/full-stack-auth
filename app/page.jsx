@@ -9,7 +9,6 @@ import { ActiveStatus, IsVerfied, SearchUserForm } from "@/libs/client"
 export default async function Page(){
   const user = await currentUser()
 
-  console.log(user)
   return <main className="bg-white shadow-md w-[100%] md:w-7/12 lg:w-[50%] m-[13%_auto_0] p-5 md:p-7 h-fit">
     <section className="flex items-center md:items-start justify-between">
       <section className="flex items-center">

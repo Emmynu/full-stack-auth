@@ -66,7 +66,7 @@ import { revalidatePath } from "next/cache"
         }
       }
     } else {
-      await Friends.create({ userId: uid , friends: {id,email,name,url}})
+      await Friends.create({ userId: uid , friends: {id,email,name,url}, isArchived: false, isBlocked:false})
     }
     revalidatePath("/")
   } catch (error) {
@@ -88,11 +88,29 @@ import { revalidatePath } from "next/cache"
   }
  }
 
+
  export async function friendExist(id){
   try {
     await connectDB()
-    const isUserInFriendList = await Friends.findOne({ "friends.id" : id})
+    const isUserInFriendList = await Friends.findOne({ "friends.id" : id })
     return isUserInFriendList
+  } catch (error) {
+    return {
+      error:error?.message
+    }
+  }
+ }
+
+
+ export async function searchFriends(id,query){
+  try {
+    await connectDB()
+    const friends = await getFriendsDB(id)
+    if (query) {
+      return friends?.map(friend=>friend?.friends?.filter(user=>user?.email?.toLowerCase().includes(query?.toLowerCase())))
+    } else {
+      return friends?.map(friend=> friend?.friends)
+    }
   } catch (error) {
     return {
       error:error?.message
