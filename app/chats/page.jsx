@@ -10,12 +10,12 @@ const Chats = async ({ searchParams }) => {
     <main className=" grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 mt-5">
       {/* friends */}
        <section className=" col-span-1 mx-5 md:ml-2 lg:ml-5">
-        <ChatFriends searchParams={ searchParams }/>
+        <ChatFriends searchParams={ searchParams }/> 
       </section>
       {/* end of friends  */}
       <section className="col-span-2 lg:col-span-3 bg-green-200 h-[100vh] flex-col items-center justify-center w-full hidden  md:flex border border-green-600">
         
-         <Image src={chatImg} alt="img" className="w-[75%] lg:w-[50%] h-[55%] md:h-[50%]  cursor-pointer select-none" />
+         <Image src={chatImg} alt="img" className="w-[75%] lg:w-[50%] h-[55%] md:h-[50%] object-cover cursor-pointer select-none" />
           <h4 className="mt-5 text-lg font-bold font-[helvetica] text-slate-700 tracking-wide">Select user to start chat</h4>
         
         {/* <nav className="flex items-center justify-between bg-white p-3">

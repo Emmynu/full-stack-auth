@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ChatHeader } from "@/libs/chat-header";
+import { ChatHeader } from "@/libs/chat-layout";
 
 
 export const metadata: Metadata = {
